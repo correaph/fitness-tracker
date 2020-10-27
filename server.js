@@ -43,8 +43,6 @@ app.get("/api/workouts/range", (req, res) => {
 
 // Inserts a new exercise into workouts collection, using its id
 app.put("/api/workouts/:id", (req, res) => {
-  console.log("req.params.id = " + req.params.id);
-  console.log("req.body = " + JSON.stringify(req.body));
   db.Workout.update(
     {
       _id: mongojs.ObjectId(req.params.id)
@@ -52,7 +50,6 @@ app.put("/api/workouts/:id", (req, res) => {
     {
       $push: {exercises: req.body }
     }).then(dbUser => {
-      console.log("dbUser = " + JSON.stringify(dbUser));
       res.json(dbUser);
     }).catch(err => {
       res.json(err);
@@ -61,12 +58,9 @@ app.put("/api/workouts/:id", (req, res) => {
 
 // Creates a new workout document and return its id for frontend use
 app.post("/api/workouts", (req, res) => {
-  console.log("req.body = " + JSON.stringify(req.body));
-  console.log("req.method = " + req.method);
   db.Workout.create({
     day: new Date()
   }).then(dbUser => {
-    console.log("dbUser = " + JSON.stringify(dbUser));
     res.json(dbUser);
   }).catch(err => {
     res.json(err);
