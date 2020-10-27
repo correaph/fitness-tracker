@@ -17,7 +17,13 @@ app.use(express.json());
 
 app.use(express.static("public"));
 
-mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/workout", { useNewUrlParser: true });
+mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/workout",
+  {
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
+    useCreateIndex: true,
+    useFindAndModify: false
+  });
 
 // Gets all the workout records from mongodb
 app.get("/api/workouts", (req, res) => {
@@ -48,7 +54,7 @@ app.put("/api/workouts/:id", (req, res) => {
       _id: mongojs.ObjectId(req.params.id)
     },
     {
-      $push: {exercises: req.body }
+      $push: { exercises: req.body }
     }).then(dbUser => {
       res.json(dbUser);
     }).catch(err => {
